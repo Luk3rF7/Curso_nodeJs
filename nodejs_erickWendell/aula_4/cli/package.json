@@ -1,17 +1,14 @@
 {
-  "name": "02",
+  "name": "cli",
   "version": "1.0.0",
   "description": "",
-  "main": "teste.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "mocha test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "axios": "^1.5.0"
-  },
   "devDependencies": {
     "mocha": "^10.2.0"
   }

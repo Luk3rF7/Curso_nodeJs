@@ -13,3 +13,9 @@
 
      // para não subir em prod utilizamos --save-dev
     npm i --save-dev mocha
+
+<li> Criando nock :
+
+como instalar :
+
+      npm install nock
