@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "mocha test.js"
+    "test": "mocha -w"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "mocha": "^10.2.0"
+  },
+  "dependencies": {
+    "commander": "^2.20.3"
   }
 }
