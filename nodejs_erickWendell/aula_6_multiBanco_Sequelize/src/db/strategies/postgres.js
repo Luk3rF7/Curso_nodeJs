@@ -12,25 +12,27 @@ const drive = new Sequelize(
     operatorsAliases: false,
   }
 )
+
+
 //Estrategia Postgres :
 class Postgres extends ICrud {
   constructor() {
     super()
     this._driver = null
     this._herois = null
-    this._connect()
   }
+  // conexao com bd
   async isConnected() {
     try {
-      await this._drive.authenticate()
+      await this._driver.authenticate()
       return true
     } catch (error) {
       console.error('fail', ForeignKeyConstraintError)
     }
   }
-
+  //definição do modelo
   async defineModel() {
-    this.herois = driver.define('herois', {
+    this.herois = this._driverdriver.define('herois', {
       id: {
         type: Sequelize.INTEGER,
         required: true,
@@ -50,16 +52,34 @@ class Postgres extends ICrud {
       freezeTabName: false,
       timestamps: false,
     })
-    await Herois.async()
+    await this._herois.async()
   }
 
+  /* 
+  todo CRUD- Postgres 
+   */
+  // create
   create(item) {
-    console.log('O item foi Salvo em Postgress')
+    const { dataValues } = return this._herois.create(item);
+    return dataValues;
   }
-
-  // metodo privado : onde ser usado somente aqui
-  _connect() {
-    this._drive = new Sequelize(
+  //read
+  async read(item = {}) {
+    const result = this._herois.findAll({ where: item, raw: true })
+  }
+  // update 
+  async update(id, item) {
+    const result = await this._herois.update(item, { where: { id: id } })
+    return result
+  }
+  //delete
+  async delete(id) {
+    const query = id ? { id: id } : {};
+    return this._herois.destroy({ where: query });
+  }
+  // Conexao
+  async connect() {
+    this._driver = new Sequelize(
       'heroes',
       'lcdeveloper',
       'minhaSenhaSecret',
@@ -70,6 +90,7 @@ class Postgres extends ICrud {
         operatorsAliases: false,
       }
     )
+    await this.defineModel();
   }
 }
 

@@ -10,8 +10,8 @@ class ContextStrategy extends ICrud {
       this._database = strategy
   }
 
-  // chamo os metodo extendido do ICrud e utilizo:
 
+  // chamo os metodo extendido do ICrud e utilizo:
   create(item) {
     return this._database.create(item)
   }
@@ -24,9 +24,11 @@ class ContextStrategy extends ICrud {
   delete(id) {
     return this._database.delete(id)
   }
+  //connect
   isConnected() {
     return this._database.isConnected();
   }
+  connect() { return this._database.connect() }
 }
 
 module.exports = ContextStrategy;
