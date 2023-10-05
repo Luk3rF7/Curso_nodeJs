@@ -27,6 +27,9 @@ class ICrud {
   delete(id) {
     throw new notImplementedException();
   }
+  connect() {
+    throw new notImplementedException();
+  }
 }
 // sem {} ele fica modo public
 module.exports = ICrud;

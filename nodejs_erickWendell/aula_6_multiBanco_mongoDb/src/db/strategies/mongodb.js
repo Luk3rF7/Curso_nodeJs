@@ -1,14 +1,71 @@
 const ICrud = require('./interface/interfaceCrud');
+const Mongoose = require('mongoose')
+
+const STATUS = {
+  0: 'Disconnect',
+  1: 'Connected',
+  2: 'Connection',
+  3: 'Disconnected'
+}
+
 
 //estrategia BD MongoDB
 class MongoDB extends ICrud {
+
   constructor() {
     super()
+    this._driver = null
+    this._herois = null
+  }
+  //
+  async isConneceted() {
+    const state = STATUS[this._driver.readyState]
+    if (state === 'Connected') return state;
+
+    if (state !== 'Connection') return state
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    return STATUS[this._driver.readyState]
+  }
+  //
+  connect() {
+    Mongoose.connect('mongodb://localhost:',
+      { useNewParser: true },
+      function (error) {
+        if (!error) return;
+        console.error('Falha na Conexão', error)
+      });
+    const connection = Mongoose.connection;
+    connection.once('open', () => console.log('Executando'))
+
+    this._driver = connection
+  }
+
+  defineModel() {
+    heroiSchema = new Mongoose.Schema({
+      nome: {
+        type: String,
+        required: true,
+      },
+      poder: {
+        type: String,
+        required: true
+      },
+      insertedAt: {
+        type: Date,
+        default: new Date()
+      }
+    })
+
+    this._herois = Mongoose.model('heroi', heroiSchema)
   }
 
   create(item) {
-    console.log('O item foi salvo em MongoDB')
+    return Mongoose.model.create(item)
+  }
+  read(item, skip, limit) {
+    return this._herois.find(item)
   }
 }
+
 
 module.exports = MongoDB;
