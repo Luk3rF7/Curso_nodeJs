@@ -1,4 +1,4 @@
-const ICrud = require('./interface/interfaceCrud');
+const ICrud = require('../interface/interfaceCrud');
 const Mongoose = require('mongoose')
 
 const STATUS = {
@@ -12,64 +12,45 @@ const STATUS = {
 //estrategia BD MongoDB
 class MongoDB extends ICrud {
 
-  constructor() {
+  constructor(connection, schema) {
     super()
-    this._driver = null
-    this._herois = null
+    this._connection = connection
+    this._schema = schema
   }
   //
   async isConneceted() {
-    const state = STATUS[this._driver.readyState]
+    const state = STATUS[this._connection.readyState]
     if (state === 'Connected') return state;
 
     if (state !== 'Connection') return state
     await new Promise(resolve => setTimeout(resolve, 1000))
-    return STATUS[this._driver.readyState]
+    return STATUS[this._connection.readyState]
   }
   //
-  connect() {
+  static connect() {
     Mongoose.connect('mongodb://localhost:',
       { useNewParser: true },
       function (error) {
         if (!error) return;
         console.error('Falha na Conexão', error)
       });
-    const connection = Mongoose.connection;
+    const connection = Mongoose.connection
     connection.once('open', () => console.log('Executando'))
+    return connection
 
-    this._driver = connection
-  }
-
-  defineModel() {
-    heroiSchema = new Mongoose.Schema({
-      nome: {
-        type: String,
-        required: true,
-      },
-      poder: {
-        type: String,
-        required: true
-      },
-      insertedAt: {
-        type: Date,
-        default: new Date()
-      }
-    })
-
-    this._herois = Mongoose.model('heroi', heroiSchema)
   }
 
   create(item) {
     return Mongoose.model.create(item)
   }
   read(item, skip = 0, limit = 10) {
-    return this._herois.find(item).skip(skip).limit(limit)
+    return this._connection.find(item).skip(skip).limit(limit)
   }
   update(id, item) {
-    return this._herois.updateOne({ _id: id, { $set: { item } }})
+    return this._connection.updateOne({ _id: id, { $set: { item } }})
 }
 delete (id){
-  return this._herois.deleteOne(_id: id)
+  return this._connection.deleteOne(_id: id)
 }
 }
 

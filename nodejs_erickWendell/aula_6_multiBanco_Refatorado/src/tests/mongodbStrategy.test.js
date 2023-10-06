@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const MongoDB = require('../db/strategies/mongodb');
+const HeroiSchema = require('../db/strategies/mongodb/Schema/herois')
 const Context = require('../db/strategies/base/contextStrategy');
 
 // objeto para teste
@@ -24,7 +25,8 @@ let MOCK_HERO_ID = ''
 const context = new Context(new MongoDB());
 describe('MongoDb Suite de Test', function () {
   beforeAll(async () => {
-    await context.connect()
+    const connection = MongoDb.connect();
+    context = nex Context(new MongoDB(connection, HeroiSchema))
     await context.create(MOCK_DEFAULT_HERO)
     const result = await context.create(MOCK_UPDATE_HERO)
 
