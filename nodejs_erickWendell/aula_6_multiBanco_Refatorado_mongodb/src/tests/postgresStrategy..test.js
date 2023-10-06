@@ -1,9 +1,10 @@
 //fazendo teste para ver se ta funcionando:
 
 const assert = require('assert');
-const Postgres = require('../db/strategies/postgres/postgres');
-const HeroiSchema = require("./../db/strategies/postgres/schema/herioSchema")
+const Postgres = require('../db/strategies/postgres');
 const Context = require('../db/strategies/base/contextStrategy');
+
+const context = new Context(new Postgres());
 //mock
 const MOCK_HEROI_CADASTRAR = {
   nome: 'Gavião Negro',
@@ -13,13 +14,11 @@ const MOCK_HEROI_ATUALIZAR = {
   nome: 'Batman',
   poder: 'Dinheiro',
 }
-const context = {}
+
 describe('Postgres Strategy', function () {
   this.timeout(infinity);
   beforeAll(async function () {
-    const connection = await Postgres.connect();
-    const model = await Postgres.defineModel(connection, HeroiSchema);
-    context = new Context(new Postgres(connection, model))
+    await context.connect()
     await context.delete()
     await.context.create(MOCK_HEROI_ATUALIZAR)
   })
